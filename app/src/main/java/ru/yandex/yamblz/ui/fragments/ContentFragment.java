@@ -14,6 +14,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.ui.adapter.ContentAdapter;
+import ru.yandex.yamblz.ui.handler.SimpleItemTouchHelperCallback;
 
 public class ContentFragment extends BaseFragment implements View.OnClickListener {
 
@@ -36,7 +38,7 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
         contentAdapter = new ContentAdapter();
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(contentAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ContentAdapter.SimpleItemTouchHelperCallback(contentAdapter));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(contentAdapter));
         touchHelper.attachToRecyclerView(rv);
     }
 

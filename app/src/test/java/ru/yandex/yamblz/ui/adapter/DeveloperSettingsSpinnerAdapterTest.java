@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.adapters;
+package ru.yandex.yamblz.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.database.DataSetObserver;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.yandex.yamblz.YamblzRobolectricUnitTestRunner;
-import ru.yandex.yamblz.ui.adapters.DeveloperSettingsSpinnerAdapter.SelectionOption;
+import ru.yandex.yamblz.ui.adapter.DeveloperSettingsSpinnerAdapter.SelectionOption;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;

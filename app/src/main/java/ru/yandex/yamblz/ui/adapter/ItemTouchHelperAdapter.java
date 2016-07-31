@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.fragments;
+package ru.yandex.yamblz.ui.adapter;
 /*
  * Copyright (C) 2015 Paul Burke
  *

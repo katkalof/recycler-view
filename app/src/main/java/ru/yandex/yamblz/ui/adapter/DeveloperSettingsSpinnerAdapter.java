@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.adapters;
+package ru.yandex.yamblz.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
