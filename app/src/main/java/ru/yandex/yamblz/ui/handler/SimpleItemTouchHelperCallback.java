@@ -1,17 +1,25 @@
 package ru.yandex.yamblz.ui.handler;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 
 import ru.yandex.yamblz.ui.adapter.ItemTouchHelperAdapter;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private final ItemTouchHelperAdapter mAdapter;
+    private final ItemTouchHelperAdapter adapter;
+    private final Paint paint;
 
     public SimpleItemTouchHelperCallback(
             ItemTouchHelperAdapter adapter) {
-        mAdapter = adapter;
+        this.adapter = adapter;
+        paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setAlpha(0);
     }
 
     @Override
@@ -25,17 +33,29 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        mAdapter.onItemMove(viewHolder.getAdapterPosition(),
+        adapter.onItemMove(viewHolder.getAdapterPosition(),
                 target.getAdapterPosition());
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        adapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 
-
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            View v = viewHolder.itemView;
+            int width = v.getWidth();
+            int left = v.getLeft();
+            int top = v.getTop();
+            int alpha = Math.min(Math.round(dX / width * 255),255);
+            paint.setAlpha(alpha);
+            c.drawRect(left, top, left + dX, top + v.getHeight(), paint);
+        }
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+    }
 
     @Override
     public boolean isLongPressDragEnabled() {
