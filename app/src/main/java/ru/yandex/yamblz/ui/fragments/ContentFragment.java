@@ -15,12 +15,15 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.yandex.yamblz.R;
 import ru.yandex.yamblz.ui.adapter.ContentAdapter;
+import ru.yandex.yamblz.ui.adapter.GridOddItemBorderDecoration;
 import ru.yandex.yamblz.ui.handler.SimpleItemTouchHelperCallback;
 
 public class ContentFragment extends BaseFragment implements View.OnClickListener {
 
     private GridLayoutManager layoutManager;
     private ContentAdapter contentAdapter;
+    private GridOddItemBorderDecoration borderDecoration;
+    private boolean enableBorderDecoration = false;
 
     @BindView(R.id.rv)
     RecyclerView rv;
@@ -40,9 +43,10 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
         rv.setAdapter(contentAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(contentAdapter));
         touchHelper.attachToRecyclerView(rv);
+        borderDecoration = new GridOddItemBorderDecoration(8);
     }
 
-    @OnClick({R.id.plus_column, R.id.minus_column})
+    @OnClick({R.id.plus_column, R.id.minus_column, R.id.decorate_border})
     @Override
     public void onClick(View v) {
         int spanCount = layoutManager.getSpanCount();
@@ -57,6 +61,12 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
                     Toast.makeText(getContext(), "one column already, enough", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.decorate_border:
+                enableBorderDecoration = !enableBorderDecoration;
+                if (enableBorderDecoration)
+                    rv.addItemDecoration(borderDecoration);
+                else
+                    rv.removeItemDecoration(borderDecoration);
         }
     }
 
