@@ -18,6 +18,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
     private final Random rnd = new Random();
     private final List<Integer> colors = new ArrayList<>();
+    private int fromPos = RecyclerView.NO_POSITION;
+    private int toPos = RecyclerView.NO_POSITION;
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,33 +46,35 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
     }
 
     private Integer createColorForPosition(int position) {
-        if (position >= colors.size()) {
+        if (position >= colors.size())
             colors.add(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
-        }
         return colors.get(position);
     }
 
     @Override
     public void onItemDismiss(int position) {
         colors.remove(position);
+        if (position == toPos)
+            toPos = RecyclerView.NO_POSITION;
+        if (position == fromPos)
+            fromPos = RecyclerView.NO_POSITION;
         notifyItemRemoved(position);
     }
 
     @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(colors, i, i + 1);
-            }
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(colors, i, i - 1);
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition);
+    public boolean onFailedToRecycleView(ContentHolder holder) {
+        return true;
     }
 
-    static class ContentHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(colors, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        toPos = toPosition;
+        fromPos = fromPosition < toPosition ? toPos - 1 : toPos + 1;
+    }
+
+    public class ContentHolder extends RecyclerView.ViewHolder {
         ContentHolder(View itemView) {
             super(itemView);
         }
@@ -78,6 +82,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
         void bind(Integer color) {
             itemView.setBackgroundColor(color);
             ((TextView) itemView).setText("#".concat(Integer.toHexString(color).substring(2)));
+        }
+
+        public boolean isMoved() {
+            return getAdapterPosition() == fromPos || getAdapterPosition() == toPos;
         }
     }
 }

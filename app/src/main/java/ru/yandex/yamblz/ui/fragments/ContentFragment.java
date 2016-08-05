@@ -15,7 +15,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ru.yandex.yamblz.R;
 import ru.yandex.yamblz.ui.adapter.ContentAdapter;
-import ru.yandex.yamblz.ui.adapter.GridOddItemBorderDecoration;
+import ru.yandex.yamblz.ui.decoration.GridOddItemBorderDecoration;
+import ru.yandex.yamblz.ui.decoration.SwitchGridOddItemBorderDecoration;
 import ru.yandex.yamblz.ui.handler.SimpleItemTouchHelperCallback;
 
 public class ContentFragment extends BaseFragment implements View.OnClickListener {
@@ -37,13 +38,14 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        layoutManager = new GridLayoutManager(getContext(), 1);
+        layoutManager = new GridLayoutManager(getContext(), 5);
         contentAdapter = new ContentAdapter();
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(contentAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(contentAdapter));
         touchHelper.attachToRecyclerView(rv);
         borderDecoration = new GridOddItemBorderDecoration(8);
+        rv.addItemDecoration(new SwitchGridOddItemBorderDecoration());
     }
 
     @OnClick({R.id.plus_column, R.id.minus_column, R.id.decorate_border})

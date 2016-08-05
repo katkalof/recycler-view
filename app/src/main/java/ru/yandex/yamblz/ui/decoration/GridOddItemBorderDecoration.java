@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.adapter;
+package ru.yandex.yamblz.ui.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ public class GridOddItemBorderDecoration extends RecyclerView.ItemDecoration {
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(border);
-        mPaint.setColor(Color.rgb(255,221,96));
+        mPaint.setColor(Color.rgb(255, 221, 96));
     }
 
 
@@ -48,7 +48,6 @@ public class GridOddItemBorderDecoration extends RecyclerView.ItemDecoration {
                         mPaint);
             }
         }
-
     }
 
 }

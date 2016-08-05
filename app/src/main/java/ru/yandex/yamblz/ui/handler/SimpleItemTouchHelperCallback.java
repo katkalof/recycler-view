@@ -24,18 +24,24 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN
+        int dragFlags = ItemTouchHelper.ACTION_STATE_DRAG
+                | ItemTouchHelper.UP | ItemTouchHelper.DOWN
                 | ItemTouchHelper.RIGHT | ItemTouchHelper.END
                 | ItemTouchHelper.LEFT | ItemTouchHelper.START;
+
         int swipeFlags = ItemTouchHelper.RIGHT | ItemTouchHelper.END;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        adapter.onItemMove(viewHolder.getAdapterPosition(),
-                target.getAdapterPosition());
         return true;
+    }
+
+    @Override
+    public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
+        super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+        adapter.onItemMove(fromPos, toPos);
     }
 
     @Override
@@ -50,7 +56,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             int width = v.getWidth();
             int left = v.getLeft();
             int top = v.getTop();
-            int alpha = Math.min(Math.round(dX / width * 255),255);
+            int alpha = Math.min(Math.round(dX / width * 255), 255);
             paint.setAlpha(alpha);
             c.drawRect(left, top, left + dX, top + v.getHeight(), paint);
         }
