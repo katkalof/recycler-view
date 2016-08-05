@@ -38,7 +38,7 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        layoutManager = new GridLayoutManager(getContext(), 5);
+        layoutManager = new GridLayoutManager(getContext(),30);
         contentAdapter = new ContentAdapter();
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(contentAdapter);
@@ -46,6 +46,8 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
         touchHelper.attachToRecyclerView(rv);
         borderDecoration = new GridOddItemBorderDecoration(8);
         rv.addItemDecoration(new SwitchGridOddItemBorderDecoration());
+        rv.setHasFixedSize(true);
+        rv.getRecycledViewPool().setMaxRecycledViews(0, 30);
     }
 
     @OnClick({R.id.plus_column, R.id.minus_column, R.id.decorate_border})
@@ -83,5 +85,6 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
         //Не видно разницы какой элемент нотифаить при count = 0
         //Видимо процесс просто дает команду аниматору
         contentAdapter.notifyItemChanged(0, 0);
+        rv.requestLayout();//Иначе не сработает анимация при setHasFixedSize(true)
     }
 }
