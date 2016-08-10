@@ -1,5 +1,6 @@
 package ru.yandex.yamblz.ui.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,13 +39,13 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        layoutManager = new GridLayoutManager(getContext(),30);
+        layoutManager = new GridLayoutManager(getContext(), 30);
         contentAdapter = new ContentAdapter();
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(contentAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(contentAdapter));
         touchHelper.attachToRecyclerView(rv);
-        borderDecoration = new GridOddItemBorderDecoration(8);
+        borderDecoration = new GridOddItemBorderDecoration(dpToPx(2));
         rv.addItemDecoration(new SwitchGridOddItemBorderDecoration());
         rv.setHasFixedSize(true);
         rv.getRecycledViewPool().setMaxRecycledViews(0, 30);
@@ -86,5 +87,15 @@ public class ContentFragment extends BaseFragment implements View.OnClickListene
         //Видимо процесс просто дает команду аниматору
         contentAdapter.notifyItemChanged(0, 0);
         rv.requestLayout();//Иначе не сработает анимация при setHasFixedSize(true)
+    }
+
+
+    /**
+     * Convert dp to px
+     *
+     * @param dp to px
+     */
+    public static int dpToPx(float dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }
